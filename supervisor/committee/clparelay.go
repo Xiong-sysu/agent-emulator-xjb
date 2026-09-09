@@ -103,10 +103,10 @@ func (c *CLPARelayCommittee) HandleMsg(_ context.Context, msg *rpcserver.Wrapped
 	c.shardEpoch[bInfo.ShardID] = max(c.shardEpoch[bInfo.ShardID], bInfo.Epoch)
 
 	// update the stop module (only after all txs are injected)
-	if c.unsentTxNum <= 0 &&
+	if outOfTxs(c.unsentTxNum, c.txSource) &&
 		len(bInfo.InnerShardTxs)+len(bInfo.Relay1Txs)+len(bInfo.Relay2Txs) == 0 {
 		c.sl.stopCnt++
-	} else if c.unsentTxNum <= 0 {
+	} else if outOfTxs(c.unsentTxNum, c.txSource) {
 		c.sl.stopCnt = 0 // reset 0 if there are transactions in a block
 	}
 

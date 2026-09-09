@@ -1,0 +1,25 @@
+base:
+  blockemulator_config: ./config_agent_http.yaml
+  result_dir: ./exp/agentemu-results
+experiment:
+  seed: 20260903
+  # Round 1 of the story; the following rounds are decided by the agent
+  # service (agent_api.mode: http) instead of round files.
+  trace: ./traces/rounds/round_1.jsonl
+agent_api:
+  mode: http # file | http
+  endpoint: "http://127.0.0.1:9092/next_trace"
+  request_timeout_seconds: 30    # per-request HTTP timeout
+  retries: 3                     # failed requests are retried with backoff, then the run ends gracefully
+  wait_confirm_timeout_seconds: 120 # wait for on-chain confirmation before asking the agent
+  chain_results_csv: "./exp/results/relay_stats_detail_tx_info.csv"
+protocols:
+  pay:
+    plugin: direct-pay
+  audit:
+    plugin: merkle-audit # onchain-audit | merkle-audit
+    contract_address: "0x0000000000000000000000000000000000000020"
+    batch_size: 2
+  identity:
+    plugin: did-simple
+    contract_address: "0x0000000000000000000000000000000000000030"

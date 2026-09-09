@@ -67,10 +67,10 @@ func (s *StaticRelayCommittee) HandleMsg(_ context.Context, msg *rpcserver.Wrapp
 		return fmt.Errorf("decode relayBlockInfoMsg: %w", err)
 	}
 
-	if s.unsentTxNum <= 0 &&
+	if outOfTxs(s.unsentTxNum, s.txSource) &&
 		len(bInfo.InnerShardTxs)+len(bInfo.Relay1Txs)+len(bInfo.Relay2Txs) == 0 {
 		s.sl.stopCnt++
-	} else if s.unsentTxNum <= 0 {
+	} else if outOfTxs(s.unsentTxNum, s.txSource) {
 		s.sl.stopCnt = 0 // reset 0 if there are transactions in a block
 	}
 

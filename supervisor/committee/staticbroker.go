@@ -103,9 +103,9 @@ func (s *StaticBrokerCommittee) HandleMsg(ctx context.Context, msg *rpcserver.Wr
 
 	// Only count empty blocks toward stop after all txs are injected.
 	// Otherwise startup empty blocks cause the supervisor to exit before injection.
-	if s.unsentTxNum <= 0 && brokerBlockTxCount(&bInfo) == 0 {
+	if outOfTxs(s.unsentTxNum, s.txSource) && brokerBlockTxCount(&bInfo) == 0 {
 		s.sl.stopCnt++
-	} else if s.unsentTxNum <= 0 {
+	} else if outOfTxs(s.unsentTxNum, s.txSource) {
 		s.sl.stopCnt = 0 // reset 0 if there are transactions in a block
 	}
 

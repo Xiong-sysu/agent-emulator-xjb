@@ -1,0 +1,6 @@
+{"agent_id":"agent-alice","action":"join","params_hash":"doc-alice-v1","ts":1}
+{"agent_id":"agent-bob","action":"join","params_hash":"doc-bob-v1","ts":2}
+{"agent_id":"agent-carol","action":"join","params_hash":"doc-carol-v1","ts":3}
+{"agent_id":"agent-alice","action":"pay","target":"agent-bob","amount":5,"request_id":"r1-pay-1","ts":4}
+{"agent_id":"agent-bob","action":"pay","target":"agent-carol","amount":3,"request_id":"r1-pay-2","ts":5}
+{"agent_id":"agent-alice","action":"append_log","params_hash":"request-r1-pay-1","request_id":"r1-pay-1","ts":6}

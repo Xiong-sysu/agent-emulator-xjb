@@ -7,6 +7,7 @@ import (
 	"github.com/HuangLab-SYSU/block-emulator-x/pkg/core/account"
 	"github.com/HuangLab-SYSU/block-emulator-x/pkg/core/transaction"
 	"github.com/HuangLab-SYSU/block-emulator-x/pkg/network/rpcserver"
+	"github.com/HuangLab-SYSU/block-emulator-x/supervisor/txsource"
 )
 
 // Committee is the interface for a committee / client.
@@ -33,6 +34,19 @@ type stopLogic struct {
 }
 
 type txLocationFunc func(tx transaction.Transaction) int64
+
+// outOfTxs reports whether the committee's tx budget is spent, or the source
+// announced exhaustion (txsource.Exhaustible, e.g. agent_source after its
+// last round). Both allow the empty-block stop logic to fire.
+func outOfTxs(unsentTxNum int64, ts txsource.TxSource) bool {
+	if unsentTxNum <= 0 {
+		return true
+	}
+
+	ex, ok := ts.(txsource.Exhaustible)
+
+	return ok && ex.Exhausted()
+}
 
 func packShardTxs(
 	txs []transaction.Transaction,

@@ -1,0 +1,57 @@
+system:
+  shard_num: 1
+  node_num: 4
+  limit: 5000
+  consensus_type: "static_relay"
+  log:
+    log_dir: "./exp/"
+    log_level: "info"
+
+consensus_node:
+  blockchain:
+    bloom_filter:
+      bitset_len: 4096
+      filter_hash_func: [ sha256, sha512, sha1 ]
+    storage:
+      block_storage_type: "bolt"
+      trie_storage_type: "eth_level_db"
+      bolt:
+        file_path_dir: "./exp/boltdb/"
+      eth_storage:
+        is_memory_db: false
+        level_file_path_dir: "./exp/trie_db/"
+        old_state_root: ""
+  tx_pool:
+    type: "number"
+  block_interval: 2000 # ms
+  block_record_dir: "./exp/block_record/"
+
+supervisor:
+  # tx_number only needs to be >= the story's total transaction count: once
+  # the last round is served, the agent source reports exhaustion and the
+  # supervisor stops via its regular empty-block logic.
+  tx_number: 1000
+  tx_injection_speed: 100
+  result_output_dir: "./exp/results/"
+  epoch_duration: 50.0
+  tx_source:
+    # agent_source compiles the agent story inside the supervisor and moves
+    # through the rounds automatically (see agentemu_config / agent_rounds).
+    tx_source_type: "agent_source" # [random_source, csv_source, agent_source]
+    tx_source_file: ""
+    exclude_contract_txs: false
+    agentemu_config: "./agentEmuConfig-http.yaml"
+    agent_rounds: 5 # generous cap; the agent service decides when to stop
+  broker_module:
+    broker_file_path: "./pkg/broker/broker"
+    broker_num: 50
+
+network:
+  bandwidth: 1000000
+  latency: 0
+  communication_mode: "direct"
+  libp2p:
+    bootstrap_key_fp: "./pkg/network/connlibp2p/bootstrap.key"
+    bootstrap_peer: "12D3KooWR6siPMZ2sMFKbgwaJFwQfnKczuPZnxHfyy1dHTzZSAUY"
+    bootstrap_ip: "127.0.0.1"
+    bootstrap_port: 12345

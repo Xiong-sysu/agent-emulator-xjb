@@ -1,9 +1,19 @@
 base:
-  blockemulator_config: ./config.yaml
+  blockemulator_config: ./config_agent.yaml
   result_dir: ./exp/agentemu-results
 experiment:
   seed: 20260903
-  trace: ./traces/minimal.jsonl
+  # Round 1 of the story; later rounds (round_2.jsonl, ...) are picked up
+  # automatically from the same directory by the FileAgentAPI.
+  trace: ./traces/rounds/round_1.jsonl
+agent_api:
+  # Feedback implementation for the multi-round loop:
+  #   file: the story continues via round_<N>.jsonl files next to the trace.
+  #   http: each round's confirmed on-chain results are posted to an agent
+  #         service, which decides the next round (see README-agentemu.md;
+  #         endpoint etc. become required, and the chain results CSV is
+  #         polled for confirmations before asking).
+  mode: file # file | http
 protocols:
   pay:
     plugin: direct-pay

@@ -36,7 +36,7 @@ func TestHostAssignsDIDsAndAuditsLifecycleAndPayment(t *testing.T) {
 	require.Len(t, result.Metrics, 10)
 	require.Empty(t, result.Transactions[3].Data)
 	require.EqualValues(t, 3, result.Transactions[3].Value.Int64())
-	require.NoError(t, host.WriteResult(result))
+	require.NoError(t, host.WriteResult(t.TempDir(), result))
 
 	registry, err := LoadRegistry(t.TempDir()+"/missing.json", 42)
 	require.NoError(t, err)

@@ -36,6 +36,8 @@ type TxSourceCfg struct {
 	TxSourceType       string `json:"tx_source_type"       yaml:"tx_source_type"`
 	TxSourceFile       string `json:"tx_source_file"       yaml:"tx_source_file"`
 	ExcludeContractTxs bool   `json:"exclude_contract_txs" yaml:"exclude_contract_txs"`
+	AgentEmuConfig     string `json:"agentemu_config"      yaml:"agentemu_config"`
+	AgentRounds        int    `json:"agent_rounds"         yaml:"agent_rounds"`
 }
 
 type BrokerModuleCfg struct {
